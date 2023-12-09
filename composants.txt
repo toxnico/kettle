@@ -1,0 +1,11 @@
+AC DC converter 12V 1.25A / 24mm height
+https://www.meanwell-web.com/en-gb/pcb-modules/pcb-mount-through-hole/12/all-output-current-a/all-output-power-w/all-input-voltage-v/ac-dc/ac-dc-single-output-encapsulated-power-supply-irm--15--12?returnurl=%2fen-gb%2fpcb-modules%2fpcb-mount-through-hole%2f12%2fall-output-current-a%2fall-output-power-w%2fall-input-voltage-v%2fac-dc%2f%23irm-15-12
+Relay 1 form A, x2
+
+Coil : 12V, 33.3mA
+Load : 12A
+https://www.digikey.com/en/products/detail/te-connectivity-potter-brumfield-relays/6-1415899-6/4924881?s=N4IgTCBcDaIEoC0ASSC0BGAggFlQEQAZ0IBdAXyA
+
+
+
+RZHH-1A4-D005
