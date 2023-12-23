@@ -7,8 +7,6 @@ typedef struct KettleStatus_t {
     bool isHeating = false;
     bool isOn = false;
     
-
-
 } KettleStatus_t;
 
 typedef struct Point_t{

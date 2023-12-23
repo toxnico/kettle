@@ -23,7 +23,7 @@ Button btnOnOff;
 DMTimer tmrReadTemperature(READ_TEMP_INTERVAL_US);
 DMTimer tmrAutoOff(AUTO_OFF_TIMEOUT_US);
 
-int presets[6] = {70, 75, 80, 85, 90, 95};
+int presets[6] = {70, 75, 80, 85, 90, 90};
 int presetIdx = 0;
 
 Adafruit_NeoPixel leds = Adafruit_NeoPixel(2, PIN_LEDS, NEO_GRB + NEO_KHZ800);
@@ -64,12 +64,6 @@ void setup()
   disp->setFont(&FreeSans12pt7b);
   disp->setTextColor(WHITE);
   disp->clearDisplay();
-  //disp->drawLine(0, 0, 20, 20, WHITE);
-  //disp->display();
-
-  // leds.setPixelColor(0, leds.Color(50,0,0));
-  // leds.setPixelColor(1, leds.Color(0,50,0));
-  // leds.show();
 
   pinMode(PIN_RELAY_A, OUTPUT);
   pinMode(PIN_RELAY_B, OUTPUT);
@@ -194,8 +188,15 @@ float readTemperature()
 
   if (degrees < MINIMUM_VALID_TEMPERATURE)
     degrees = MINIMUM_VALID_TEMPERATURE;
-  return 72;
+  //return 72;
   return (int)degrees;
+}
+
+void off()
+{
+  status.isOn = false;
+  presetIdx = 0;
+  status.targetTemperature = presets[presetIdx];
 }
 
 void handleBtnProg()
@@ -214,7 +215,6 @@ void handleBtnProg()
   status.isOn = true;
   if (wasOn)
   {
-
     presetIdx++;
     if (presetIdx > 5)
       presetIdx = 0;
@@ -229,7 +229,14 @@ void handleBtnOnOff()
   if (btnOnOff.pressed())
   {
     tmrAutoOff.reset();
-    status.isOn = !status.isOn;
+    
+    if(status.isOn)
+      off();
+    else
+      status.isOn = true;
+    
+    //status.isOn = !status.isOn;
+    
   }
 }
 
@@ -240,7 +247,7 @@ void handleBtnPlus()
   if (btnPlus.pressed())
   {
     tmrAutoOff.reset();
-    status.targetTemperature = constrain(status.targetTemperature + 1, ABSOLUTE_MIN_TEMPERATURE, ABSOLUTE_MAX_TEMPERATURE);
+    status.targetTemperature = constrain(status.targetTemperature + 5, ABSOLUTE_MIN_TEMPERATURE, ABSOLUTE_MAX_TEMPERATURE);
   }
 }
 
@@ -251,7 +258,7 @@ void handleBtnMinus()
   if (btnMinus.pressed())
   {
     tmrAutoOff.reset();
-    status.targetTemperature = constrain(status.targetTemperature - 1, ABSOLUTE_MIN_TEMPERATURE, ABSOLUTE_MAX_TEMPERATURE);
+    status.targetTemperature = constrain(status.targetTemperature - 5, ABSOLUTE_MIN_TEMPERATURE, ABSOLUTE_MAX_TEMPERATURE);
   }
 }
 
@@ -271,6 +278,8 @@ void displayScreenSaver()
   disp->display();
 }
 
+
+/*
 bool mustHeat()
 {
   //controller is off ?
@@ -288,6 +297,7 @@ bool mustHeat()
   //by default, for security:
   return false;
 }
+*/
 
 void loop()
 {
@@ -300,7 +310,7 @@ void loop()
   //timeout, or kettle not on place
   if (tmrAutoOff.isTimeReached() || readTemperature() <= MINIMUM_VALID_TEMPERATURE)
   {
-    status.isOn = false;
+    off();
   }
 
   //read temp every few seconds
@@ -317,18 +327,20 @@ void loop()
 
   display();
 
-  status.isHeating = mustHeat();
+  //status.isHeating = mustHeat();
 
-  /*
+  //hot enough?
   if (status.currentTemperature > status.targetTemperature)
     status.isHeating = false;
 
+  //too cold?
   if (status.currentTemperature < status.targetTemperature - TEMPERATURE_HYSTERESIS)
     status.isHeating = true;
 
+  //invalid temperature?
   if (status.currentTemperature <= MINIMUM_VALID_TEMPERATURE)
     status.isHeating = false;
-  */
+  
 
   enableHeater(status.isHeating);
 }

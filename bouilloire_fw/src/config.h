@@ -15,7 +15,7 @@
 #define PIN_LEDS 16
 
 #define ABSOLUTE_MIN_TEMPERATURE 20
-#define ABSOLUTE_MAX_TEMPERATURE 100
+#define ABSOLUTE_MAX_TEMPERATURE 90
 
 //coefficients of the equation temp = a * x + b
 #define TEMP_CONVERSION_A 0.0341456166419019
